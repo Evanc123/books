@@ -1,20 +1,31 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
 
 export const imagesRouter = createTRPCRouter({
-  getById: protectedProcedure
+  getById: publicProcedure
     .input(z.object({ id: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
       return await ctx.db.image.findFirst({
         where: {
           id: input.id,
-          createdBy: { id: ctx.session.user.id },
         },
         include: {
-          masks: true,
+          masks: {
+            include: {
+              book: {
+                include: {
+                  comments: true,
+                },
+              },
+            },
+          },
         },
       });
     }),
@@ -30,11 +41,34 @@ export const imagesRouter = createTRPCRouter({
       });
     }),
 
+  getAllPublic: publicProcedure.query(({ ctx }) => {
+    return ctx.db.image.findMany();
+  }),
+
   getAll: protectedProcedure.query(({ ctx }) => {
     return ctx.db.image.findMany({
       where: { createdBy: { id: ctx.session.user.id } },
     });
   }),
+  delete: protectedProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      // check if the user is the owner
+      const image = await ctx.db.image.findFirst({
+        where: {
+          id: input.id,
+          createdBy: { id: ctx.session.user.id },
+        },
+      });
+      if (!image) {
+        throw new Error("Image not found");
+      }
+      return ctx.db.image.delete({
+        where: {
+          id: image.id,
+        },
+      });
+    }),
 
   createMask: protectedProcedure
     .input(
@@ -48,6 +82,26 @@ export const imagesRouter = createTRPCRouter({
         data: {
           imageId: input.imageId,
           polygons: input.polygonString,
+        },
+      });
+    }),
+
+  createBook: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().min(1),
+        author: z.string().min(1),
+        content: z.string().min(1),
+        maskId: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.book.create({
+        data: {
+          author: input.author,
+          title: input.title,
+          content: input.content,
+          maskId: input.maskId,
         },
       });
     }),

@@ -33,10 +33,10 @@ model Comment {
     updatedAt DateTime @updatedAt
 
     authorId String
-    author   User   @relation(fields: [authorId], references: [id])
+    author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
     bookId String
-    book   Book   @relation(fields: [bookId], references: [id])
+    book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
 }
 
 model Book {
@@ -48,14 +48,17 @@ model Book {
     updatedAt DateTime  @updatedAt
     hasRead   Boolean   @default(false)
     comments  Comment[]
+    maskId    String?   @unique
+    mask      Mask?     @relation(fields: [maskId], references: [id], onDelete: Cascade)
 }
 
 model Mask {
     id       String  @id @default(cuid())
     imageId  String
-    image    Image   @relation(fields: [imageId], references: [id])
+    image    Image   @relation(fields: [imageId], references: [id], onDelete: Cascade)
     polygons String
     imageUrl String?
+    book     Book?
 }
 
 model Image {
