@@ -1,26 +1,12 @@
-// Import the necessary module from your service file
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req, res) {
-  if (req.method === "POST") {
-    const { imageId, embeddingUrl } = req.body;
+type ResponseData = {
+  message: string;
+};
 
-    // Validate the input
-    if (!imageId || !embeddingUrl) {
-      return res.status(400).json({ error: "Missing imageId or embeddingUrl" });
-    }
-
-    try {
-      // Assuming setImageDetails is an async function
-      await setImageDetails(imageId, embeddingUrl);
-      return res.status(200).json({ message: "Success" });
-    } catch (error) {
-      // Handle any errors from your service
-      console.error(error);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-  } else {
-    // Handle any non-POST requests
-    res.setHeader("Allow", ["POST"]);
-    return res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
+export default function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>,
+) {
+  res.status(200).json({ message: "Hello from Next.js!" });
 }
