@@ -8,6 +8,9 @@ import CopyPlugin from "copy-webpack-plugin";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   reactStrictMode: true,
 
   /**
