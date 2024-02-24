@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { api } from "~/utils/api";
 
-const AWS_IMAGE_PREFIX = "https://new-bookstack.s3.amazonaws.com/uploads/";
-
 const ImageUpload: React.FC = () => {
-  const [fileName, setFileName] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const getPresignedUrlMutation = api.aws.getPresignedUrl.useMutation();
+
+  const fetchImagesQuery = api.images.getAll.useQuery();
+  const createImageMutation = api.images.create.useMutation({
+    onSuccess: async () => {
+      await fetchImagesQuery.refetch();
+    },
+  });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedFile(event.target.files?.[0] ?? null);
@@ -31,18 +35,17 @@ const ImageUpload: React.FC = () => {
       const { url } = result;
 
       // Use the presigned URL to upload the file directly to the storage service
-      const image = await fetch(url, {
+      await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": selectedFile.type,
         },
         body: selectedFile,
       });
-      console.log(image);
 
-      setFileName(fileNameToUpload);
-
-      alert("Image uploaded successfully!");
+      await createImageMutation.mutateAsync({
+        fileName: fileNameToUpload,
+      });
     } catch (error) {
       console.error("Upload failed:", error);
       alert("Failed to upload image.");
@@ -63,13 +66,6 @@ const ImageUpload: React.FC = () => {
       >
         Upload Image
       </button>
-      {fileName && (
-        <img
-          src={AWS_IMAGE_PREFIX + fileName}
-          alt="Uploaded image"
-          className="mt-4"
-        />
-      )}
     </div>
   );
 };

@@ -1,8 +1,7 @@
 import { z } from "zod";
-import { initTRPC } from "@trpc/server";
 import * as trpc from "@trpc/server";
 import AWS from "aws-sdk";
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { env } from "process";
 
 // Configure AWS
@@ -12,10 +11,8 @@ const s3 = new AWS.S3({
   secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
 });
 
-const t = initTRPC.create();
-
 export const awsRouter = createTRPCRouter({
-  getPresignedUrl: t.procedure
+  getPresignedUrl: protectedProcedure
     .input(z.object({ fileType: z.string(), fileName: z.string() })) // Using zod for input validation
     .mutation(async ({ input }) => {
       const { fileType, fileName } = input;

@@ -2,8 +2,17 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import ImageUpload from "~/components/image-upload";
+import App from "~/sam/App";
+import AppContextProvider from "~/sam/components/hooks/context";
 
 import { api } from "~/utils/api";
+import dynamic from "next/dynamic";
+
+const DynamicComponentWithNoSSR = dynamic(() => import("../sam/App"), {
+  ssr: false,
+});
+
+const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
@@ -64,6 +73,8 @@ function AuthShowcase() {
     { enabled: sessionData?.user !== undefined },
   );
 
+  const { data: images } = api.images.getAll.useQuery();
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-center text-2xl text-white">
@@ -77,6 +88,17 @@ function AuthShowcase() {
         {sessionData ? "Sign out" : "Sign in"}
       </button>
       <ImageUpload />
+      {images?.map((image) => (
+        <img
+          key={image.id}
+          src={AWS_BUCKET_NAME + image.name}
+          alt={image.name}
+          className="max-w-xs"
+        />
+      ))}
+      <AppContextProvider>
+        <DynamicComponentWithNoSSR />
+      </AppContextProvider>
     </div>
   );
 }

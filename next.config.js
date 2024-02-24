@@ -4,6 +4,8 @@
  */
 await import("./src/env.js");
 
+import CopyPlugin from "copy-webpack-plugin";
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -17,6 +19,49 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  webpack: (config, {}) => {
+    config.plugins.push(
+      new CopyPlugin({
+        patterns: [
+          {
+            from: "./node_modules/onnxruntime-web/dist/ort-wasm.wasm",
+            to: "static/chunks",
+          },
+          {
+            from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.wasm",
+            to: "static/chunks",
+          },
+        ],
+      }),
+    );
+    return config;
+  },
+  // webpack: (config, {}) => {
+  //   config.resolve.extensions.push(".ts", ".tsx");
+  //   config.resolve.fallback = { fs: false };
+
+  //   config.plugins.push(
+  //     new NodePolyfillPlugin(),
+  //     new CopyPlugin({
+  //       patterns: [
+  //         {
+  //           from: "./node_modules/onnxruntime-web/dist/ort-wasm.wasm",
+  //           to: "static/chunks/pages",
+  //         },
+  //         {
+  //           from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.wasm",
+  //           to: "static/chunks/pages",
+  //         },
+  //         {
+  //           from: "./model",
+  //           to: "static/chunks/pages",
+  //         },
+  //       ],
+  //     }),
+  //   );
+
+  //   return config;
+  // },
 };
 
 export default config;
