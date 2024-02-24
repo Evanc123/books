@@ -27,11 +27,14 @@ model Post {
 }
 
 model Image {
-    id        Int      @id @default(autoincrement())
-    name      String
-    url       String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    // make id a cuid
+    id           String   @id @default(cuid())
+    name         String
+    url          String
+    embeddingUrl String?
+    isProcessed  Boolean  @default(false)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
