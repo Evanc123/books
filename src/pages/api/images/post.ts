@@ -1,9 +1,5 @@
-import { type Image } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
-import {
-  getUnprocessed,
-  setEmbeddingUrl,
-} from "~/server/services/images.service";
+import { setEmbeddingUrl } from "~/server/services/images.service";
 
 type RequestData = {
   imageId: string;

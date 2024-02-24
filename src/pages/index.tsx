@@ -3,14 +3,10 @@ import Head from "next/head";
 import Link from "next/link";
 import ImageUpload from "~/components/image-upload";
 import App from "~/sam/App";
-import AppContextProvider from "~/sam/components/hooks/context";
 
 import { api } from "~/utils/api";
 import dynamic from "next/dynamic";
-
-const DynamicComponentWithNoSSR = dynamic(() => import("../sam/App"), {
-  ssr: false,
-});
+import { useRouter } from "next/router";
 
 const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
 
@@ -66,6 +62,7 @@ export default function Home() {
 }
 
 function AuthShowcase() {
+  const router = useRouter();
   const { data: sessionData } = useSession();
 
   const { data: secretMessage } = api.post.getSecretMessage.useQuery(
@@ -74,6 +71,10 @@ function AuthShowcase() {
   );
 
   const { data: images } = api.images.getAll.useQuery();
+
+  const routeToImageView = (imageId: string) => {
+    void router.push(`/images/${imageId}`);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -90,15 +91,13 @@ function AuthShowcase() {
       <ImageUpload />
       {images?.map((image) => (
         <img
+          onClick={() => routeToImageView(image.id)}
           key={image.id}
           src={AWS_BUCKET_NAME + image.name}
           alt={image.name}
           className="max-w-xs"
         />
       ))}
-      <AppContextProvider>
-        <DynamicComponentWithNoSSR />
-      </AppContextProvider>
     </div>
   );
 }

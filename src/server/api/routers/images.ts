@@ -2,9 +2,19 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
+export const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
 
 export const imagesRouter = createTRPCRouter({
+  getById: protectedProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.image.findFirst({
+        where: {
+          id: input.id,
+          createdBy: { id: ctx.session.user.id },
+        },
+      });
+    }),
   create: protectedProcedure
     .input(z.object({ fileName: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {

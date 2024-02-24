@@ -21,8 +21,13 @@ import npyjs from "npyjs";
 const IMAGE_PATH = "/mir.jpg";
 const IMAGE_EMBEDDING = "/mir.npy";
 const MODEL_DIR = "/model/sam_onnx_quantized_example.onnx";
-
-const App = () => {
+const App = ({
+  imageUrl,
+  imageEmbeddingUrl,
+}: {
+  imageUrl: string;
+  imageEmbeddingUrl: string;
+}) => {
   const {
     clicks: [clicks],
     image: [, setImage],
@@ -52,11 +57,11 @@ const App = () => {
     initModel();
 
     // Load the image
-    const url = new URL(IMAGE_PATH, location.origin);
+    const url = new URL(imageUrl, location.origin);
     loadImage(url);
 
     // Load the Segment Anything pre-computed embedding
-    Promise.resolve(loadNpyTensor(IMAGE_EMBEDDING, "float32")).then(
+    Promise.resolve(loadNpyTensor(imageEmbeddingUrl, "float32")).then(
       (embedding) => setTensor(embedding),
     );
     console.log("test");
