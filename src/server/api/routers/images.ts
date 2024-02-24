@@ -13,6 +13,9 @@ export const imagesRouter = createTRPCRouter({
           id: input.id,
           createdBy: { id: ctx.session.user.id },
         },
+        include: {
+          masks: true,
+        },
       });
     }),
   create: protectedProcedure
@@ -32,4 +35,20 @@ export const imagesRouter = createTRPCRouter({
       where: { createdBy: { id: ctx.session.user.id } },
     });
   }),
+
+  createMask: protectedProcedure
+    .input(
+      z.object({
+        imageId: z.string().min(1),
+        polygonString: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.mask.create({
+        data: {
+          imageId: input.imageId,
+          polygons: input.polygonString,
+        },
+      });
+    }),
 });

@@ -49,9 +49,10 @@ const Tool = ({ handleMouseMove }: ToolProps) => {
     <>
       {image && (
         <img
-          onMouseMove={handleMouseMove}
-          onMouseOut={() => _.defer(() => setMaskImg(null))}
-          onTouchStart={handleMouseMove}
+          // onMouseMove={handleMouseMove}
+          // onMouseOut={() => _.defer(() => setMaskImg(null))}
+          onClick={handleMouseMove}
+          // onTouchStart={handleMouseMove}
           src={image.src}
           className={`${
             shouldFitToWidth ? "w-full" : "h-full"

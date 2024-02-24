@@ -26,6 +26,38 @@ model Post {
     @@index([name])
 }
 
+model Comment {
+    id        Int      @id @default(autoincrement())
+    content   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    authorId String
+    author   User   @relation(fields: [authorId], references: [id])
+
+    bookId String
+    book   Book   @relation(fields: [bookId], references: [id])
+}
+
+model Book {
+    id        String    @id @default(cuid())
+    title     String
+    author    String
+    content   String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    hasRead   Boolean   @default(false)
+    comments  Comment[]
+}
+
+model Mask {
+    id       String  @id @default(cuid())
+    imageId  String
+    image    Image   @relation(fields: [imageId], references: [id])
+    polygons String
+    imageUrl String?
+}
+
 model Image {
     // make id a cuid
     id           String   @id @default(cuid())
@@ -38,6 +70,7 @@ model Image {
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
+    masks       Mask[]
 
     @@index([name])
 }
@@ -79,6 +112,7 @@ model User {
     sessions      Session[]
     posts         Post[]
     Image         Image[]
+    Comment       Comment[]
 }
 
 model VerificationToken {
