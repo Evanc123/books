@@ -50,7 +50,7 @@ function AuthShowcase() {
       >
         {sessionData ? "Sign out" : "Sign in"}
       </header>
-      <div className="absolute top-0">{sessionData && <ImageUpload />}</div>
+      <div className="absolute top-1">{sessionData && <ImageUpload />}</div>
       <div className="pt-10">
         Shelves
         {images?.map((image) => (
@@ -59,7 +59,7 @@ function AuthShowcase() {
             key={image.id}
             src={AWS_BUCKET_NAME + image.name}
             alt={image.name}
-            className="max-w-xs"
+            className="max-w-xs cursor-pointer"
           />
         ))}
       </div>

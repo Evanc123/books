@@ -62,7 +62,7 @@ const ImageUpload: React.FC = () => {
       />
       <button
         onClick={uploadImage}
-        className="rounded px-4 py-2 font-bold text-black"
+        className="rounded border px-4 py-2 font-bold text-black hover:bg-gray-100"
       >
         Upload Image
       </button>
