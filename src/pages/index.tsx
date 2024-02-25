@@ -28,10 +28,11 @@ export default function Home() {
       {/* </div>
         </div>
       </main> */}
-      <div className="sticky bottom-0 right-0 w-[400px] border bg-amber-500">
-        Interested in the future of books?{" "}
-        <a href="https://dewey.ink">check out dewey</a>
-      </div>
+      <a href="https://dewey.ink">
+        <div className="sticky bottom-0 right-0 w-[340px] border bg-amber-500">
+          Interested in the future of books? check out dewey
+        </div>
+      </a>
     </>
   );
 }
