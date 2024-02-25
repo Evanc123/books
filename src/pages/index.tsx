@@ -36,7 +36,9 @@ function AuthShowcase() {
   const router = useRouter();
   const { data: sessionData } = useSession();
 
-  const { data: images } = api.images.getAll.useQuery();
+  const { data: images } = !sessionData
+    ? api.images.getAllPublic.useQuery()
+    : api.images.getAll.useQuery();
 
   const routeToImageView = (imageId: string) => {
     void router.push(`/images/${imageId}`);
