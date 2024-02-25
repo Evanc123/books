@@ -28,6 +28,10 @@ export default function Home() {
       {/* </div>
         </div>
       </main> */}
+      <div className="sticky bottom-0 right-0 w-[400px] border bg-amber-500">
+        Interested in the future of books?{" "}
+        <a href="https://dewey.ink">check out dewey</a>
+      </div>
     </>
   );
 }
@@ -45,7 +49,7 @@ function AuthShowcase() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="relative flex flex-col items-center justify-center gap-4">
       <header
         className="absolute right-4 top-0 cursor-pointer rounded-full bg-white/10 font-semibold text-black no-underline transition hover:bg-white/20"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
