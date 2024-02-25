@@ -1,18 +1,11 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
-import App from "~/sam/App";
 
-import dynamic from "next/dynamic";
-
-import AppContextProvider from "~/sam/components/hooks/context";
 import { useState } from "react";
 import { useModel } from "~/sam/hooks/useModel";
 import { EditMaskedImage } from "~/sam/components/viewImage";
 import { useSession } from "next-auth/react";
-const DynamicComponentWithNoSSR = dynamic(() => import("../../sam/App"), {
-  ssr: false,
-});
 
 const AWS_BUCKET_URL = "https://new-bookstack.s3.amazonaws.com/";
 const ImagePage: NextPage = () => {
@@ -105,14 +98,6 @@ const ImagePage: NextPage = () => {
 
   return (
     <div className="flex p-2">
-      {/* {isUrlAndEmbeddingNotZeroLength && (
-        <AppContextProvider>
-          <DynamicComponentWithNoSSR
-            imageUrl={image?.url ?? ""}
-            imageEmbeddingUrl={AWS_BUCKET_URL + image?.embeddingUrl ?? ""}
-          />
-        </AppContextProvider>
-      )} */}
       <div className="w-1/2 shrink-0">
         Miranda&apos;s Bookshelf
         {isUrlAndEmbeddingNotZeroLength && (
@@ -121,9 +106,6 @@ const ImagePage: NextPage = () => {
             alt="test"
             polygons={image?.masks}
             selectedMask={selectedMask}
-            onMaskClick={() => {}}
-            setPosition={() => {}}
-            removeMask={() => {}}
             sendClickToModel={sendClickToModel}
             setNaturalImageHeight={setHeight}
             setNaturalImageWidth={setWidth}

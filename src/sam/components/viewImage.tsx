@@ -1,7 +1,5 @@
-import { modelInputProps } from "./helpers/Interfaces";
+import { type modelInputProps } from "./helpers/Interfaces";
 import React, { useEffect, useRef, useState } from "react";
-// import { Mask } from "../hooks/useMasks";
-// import { Position } from "./StackStory";
 
 interface IEditMaskedImage {
   sendClickToModel: (
@@ -9,9 +7,8 @@ interface IEditMaskedImage {
     image: HTMLImageElement,
   ) => Promise<string | undefined>;
 
-  removeMask: (maskId: string) => void;
-  setNaturalImageWidth: (value: any) => void;
-  setNaturalImageHeight: (value: any) => void;
+  setNaturalImageWidth: (value: number) => void;
+  setNaturalImageHeight: (value: number) => void;
   src: string;
   alt: string;
 
@@ -19,24 +16,17 @@ interface IEditMaskedImage {
   selectedMask: Mask | null;
 
   setSelectedMaskId: (maskId: string | null) => void;
-  onMaskClick: (maskId: string) => void;
-  setPosition: (pos: Position) => void;
-  onCreateMask: (maskId: string) => void;
 }
 
 export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
   sendClickToModel,
-  removeMask,
   setNaturalImageHeight,
   setNaturalImageWidth,
   src,
   alt,
   polygons,
   selectedMask,
-  onMaskClick,
-  setPosition,
   setSelectedMaskId,
-  onCreateMask,
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -48,7 +38,7 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
   const [width, setWidth] = useState<number | null>(null);
   const [height, setHeight] = useState<number | null>(null);
 
-  const masksToShow = polygons;
+  const polygonsToShow = polygons;
   useEffect(() => {
     if (imageRef.current) {
       setImageDimensions({
@@ -66,10 +56,10 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
       setWidth(rect.width);
       setHeight(rect.height);
     }
-    if (imageDimensions && width && height && masksToShow) {
+    if (imageDimensions && width && height && polygonsToShow) {
       // Calculate new points for each polygon
 
-      const newPolygons = masksToShow.map((mask) => {
+      const newPolygons = polygonsToShow.map((mask) => {
         const dbPolygons = JSON.parse(mask.polygons) as Array<any>;
         // const dbPolygons = mask?.mask_polygon as Array<any>;
         return dbPolygons?.map(({ x, y }) => ({
@@ -80,7 +70,7 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
 
       if (polygonRefs.current) {
         newPolygons.forEach((newPoints, index) => {
-          if (polygonRefs.current && polygonRefs.current[index]) {
+          if (polygonRefs.current?.[index]) {
             polygonRefs.current[index]?.setAttribute(
               "points",
               newPoints.map(({ x, y }) => `${x},${y}`).join(" "),
@@ -89,7 +79,7 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
         });
       }
     }
-  }, [imageDimensions, width, height, polygons, selectedMask, masksToShow]);
+  }, [imageDimensions, width, height, polygons, selectedMask, polygonsToShow]);
 
   const handleImageLoad = () => {
     if (imageRef.current && svgRef.current) {
@@ -133,8 +123,8 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
       if (imageRef.current && svgRef.current) {
         const aspectRatio =
           imageRef.current.naturalWidth / imageRef.current.naturalHeight;
-        const maxWidth = window.innerWidth * 0.5;
-        const maxHeight = window.innerHeight * 0.8;
+        const maxWidth = window.innerWidth * 1;
+        const maxHeight = window.innerHeight * 1;
         let newWidth = maxWidth;
         let newHeight = newWidth / aspectRatio;
 
@@ -179,20 +169,8 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
         { x: x, y: y, clickType: 1 },
         img,
       );
-      if (newMaskId) {
-        onCreateMask(newMaskId);
-      }
     }
-    sendToModel();
-  };
-
-  const handlePolygonClick = (maskId: string, polygon: Point[]) => () => {
-    if (imageRef.current) {
-      const naturalWidth = imageRef.current.naturalWidth;
-      const polygonCenter =
-        polygon.reduce((sum, { x }) => sum + x, 0) / polygon.length;
-      onMaskClick(maskId);
-    }
+    void sendToModel();
   };
 
   return (
@@ -238,7 +216,7 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
             <stop offset="100%" stopColor="rgba(255, 255, 255, 0.1)" />
           </linearGradient>
         </defs>
-        {masksToShow?.map((mask, index) => {
+        {polygonsToShow?.map((mask, index) => {
           // const points = mask.mask_polygon as Array<any>;
 
           const points = JSON.parse(mask.polygons) as Array<any>;
@@ -253,9 +231,8 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
               strokeWidth="2"
               // onClick={handlePolygonClick(mask.id, points)}
               pointerEvents="all"
-              className="cursor-pointer"
               className={`cursor-pointer ${
-                selectedMask?.id === mask.id ? "opacity-100" : "opacity-0"
+                selectedMask?.id === mask?.id ? "opacity-100" : "opacity-0"
               }`} // Update this line
               onMouseEnter={() => setSelectedMaskId(mask.id)} // Add this line
               // onMouseLeave={() => setSelectedMaskId(null)}
