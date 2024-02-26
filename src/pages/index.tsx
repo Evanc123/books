@@ -1,4 +1,3 @@
-"use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import ImageUpload from "~/components/image-upload";
@@ -43,10 +42,9 @@ function AuthShowcase() {
     void router.push(`/images/${imageId}`);
   };
 
-  const toggleShelveView = () => {
-    const newMyShelvesValue = myShelves === "true" ? "false" : "true";
+  const toggleShelveView = (status: string) => {
     void router.push({
-      query: { ...router.query, myShelves: newMyShelvesValue },
+      query: { ...router.query, myShelves: status },
     });
   };
 
@@ -67,13 +65,13 @@ function AuthShowcase() {
       <div className="flex gap-4 pt-4">
         <div
           className={`${myShelves === "false" ? "underline " : "hover:underline hover:decoration-slate-300"} cursor-pointer`}
-          onClick={toggleShelveView}
+          onClick={() => toggleShelveView("false")}
         >
           Featured Shelves
         </div>
         <div
           className={`${myShelves === "true" ? "underline hover:decoration-black" : "hover:underline hover:decoration-slate-300"} cursor-pointer `}
-          onClick={toggleShelveView}
+          onClick={() => toggleShelveView("true")}
         >
           My Shelves
         </div>
@@ -87,13 +85,15 @@ function AuthShowcase() {
 
       {shouldShowSignupButton && (
         <div className="flex flex-col items-center gap-4">
-          <div>Sign up to create your own shelves</div>
-          <button
-            onClick={() => void signIn()}
-            className="rounded border border-black px-2 py-1 hover:bg-black hover:text-white"
-          >
-            Sign up
-          </button>
+          <div>
+            <span
+              onClick={() => void signIn()}
+              className="mr-1.5 cursor-pointer underline decoration-slate-500 hover:decoration-black"
+            >
+              Sign up
+            </span>
+            to upload your shelves!
+          </div>
         </div>
       )}
 

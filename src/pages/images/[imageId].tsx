@@ -102,14 +102,13 @@ const ImagePage: NextPage = () => {
         Miranda&apos;s Bookshelf
         {isUrlAndEmbeddingNotZeroLength && (
           <EditMaskedImage
-            src={image?.url}
+            src={image?.url ?? ""}
             alt="test"
             polygons={image?.masks}
             selectedMask={selectedMask}
             sendClickToModel={sendClickToModel}
             setNaturalImageHeight={setHeight}
             setNaturalImageWidth={setWidth}
-            onCreateMask={() => {}}
             setSelectedMaskId={setSelectedMaskId}
           />
         )}
