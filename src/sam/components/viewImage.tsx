@@ -183,7 +183,6 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
         ref={imageRef}
         onLoad={handleImageLoad}
         onClick={handleImageClick}
-        crossOrigin="anonymous"
       />
       <svg
         ref={svgRef}
