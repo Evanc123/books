@@ -57,8 +57,8 @@ function AuthShowcase() {
       </header>
 
       <header
-        className="absolute right-4 top-4 cursor-pointer rounded-full bg-white/10 font-semibold text-black no-underline transition hover:bg-white/20 hover:underline"
-        // onClick={sessionData ? () => void signOut() : () => void signIn()}
+        className="absolute right-4 top-4 flex cursor-pointer gap-2 rounded-full bg-white/10 font-semibold text-black no-underline transition hover:bg-white/20 hover:underline"
+        onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         <a
           target="_blank"
@@ -66,9 +66,9 @@ function AuthShowcase() {
         >
           Join the waitlist!
         </a>
-        {/* {sessionData ? "Sign out" : "Sign in"} */}
+        {sessionData ? "Sign out" : "Sign in"}
       </header>
-      <div className="absolute top-1">{sessionData && <ImageUpload />}</div>
+      {/* <div className="absolute top-1">{sessionData && <ImageUpload />}</div> */}
       <div className="flex gap-4 pt-4">
         <div
           className={`${myShelves === "false" ? "underline " : "hover:underline hover:decoration-slate-300"} cursor-pointer`}
