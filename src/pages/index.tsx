@@ -39,7 +39,7 @@ function AuthShowcase() {
       : api.images.getAllPublic.useQuery();
 
   const routeToImageView = (imageId: string) => {
-    void router.push(`/images/${imageId}`);
+    void router.push(`/shelves/${imageId}`);
   };
 
   const toggleShelveView = (status: string) => {
@@ -53,13 +53,20 @@ function AuthShowcase() {
   return (
     <div className="relative flex flex-col items-center justify-center gap-4">
       <header className="absolute left-4 top-4 hover:cursor-pointer hover:underline">
-        Shelves
+        Bookshelf
       </header>
+
       <header
         className="absolute right-4 top-4 cursor-pointer rounded-full bg-white/10 font-semibold text-black no-underline transition hover:bg-white/20 hover:underline"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
+        // onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
-        {sessionData ? "Sign out" : "Sign in"}
+        <a
+          target="_blank"
+          href="https://docs.google.com/forms/d/e/1FAIpQLScvm3yB5v50DBtivI9Ju-FdDl8VUfXm2Tgy3cON0nWFJHxhpg/viewform?usp=send_form"
+        >
+          Join the waitlist!
+        </a>
+        {sessionData ? "Sign out" : ""}
       </header>
       <div className="absolute top-1">{sessionData && <ImageUpload />}</div>
       <div className="flex gap-4 pt-4">
@@ -86,18 +93,26 @@ function AuthShowcase() {
       {shouldShowSignupButton && (
         <div className="flex flex-col items-center gap-4">
           <div>
-            <span
-              onClick={() => void signIn()}
-              className="mr-1.5 cursor-pointer underline decoration-slate-500 hover:decoration-black"
+            <a
+              target="_blank"
+              href="https://docs.google.com/forms/d/e/1FAIpQLScvm3yB5v50DBtivI9Ju-FdDl8VUfXm2Tgy3cON0nWFJHxhpg/viewform?usp=send_form"
             >
-              Sign up
-            </span>
-            to upload your shelves!
+              <span
+                // onClick={() => void signIn()}
+                className="mr-1.5 cursor-pointer underline decoration-slate-500 hover:decoration-black"
+              >
+                Join the waitlist
+              </span>
+            </a>
+            to upload your shelves soon!
           </div>
         </div>
       )}
 
-      <ResponsiveMasonry className="w-full px-20 pt-6">
+      <ResponsiveMasonry
+        columnsCountBreakPoints={{ 350: 1, 750: 2 }}
+        className="w-full px-4 pt-6 sm:px-40"
+      >
         <Masonry columnsCount={2}>
           {images?.map((image) => (
             // eslint-disable-next-line @next/next/no-img-element
