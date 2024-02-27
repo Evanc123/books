@@ -58,7 +58,7 @@ function AuthShowcase() {
 
       <header
         className="absolute right-4 top-4 cursor-pointer rounded-full bg-white/10 font-semibold text-black no-underline transition hover:bg-white/20 hover:underline"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
+        // onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         <a
           target="_blank"
@@ -66,7 +66,7 @@ function AuthShowcase() {
         >
           Join the waitlist!
         </a>
-        {sessionData ? "Sign out" : "Sign in"}
+        {/* {sessionData ? "Sign out" : "Sign in"} */}
       </header>
       <div className="absolute top-1">{sessionData && <ImageUpload />}</div>
       <div className="flex gap-4 pt-4">
@@ -119,7 +119,7 @@ function AuthShowcase() {
             <img
               key={image.id}
               onClick={() => routeToImageView(image.id)}
-              src={`${AWS_BUCKET_NAME}${image.url}`}
+              src={image.url}
               alt={image.name}
               className="w-full cursor-pointer object-cover"
               style={{ aspectRatio: "auto" }}
