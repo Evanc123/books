@@ -119,7 +119,7 @@ function AuthShowcase() {
             <img
               key={image.id}
               onClick={() => routeToImageView(image.id)}
-              src={`${AWS_BUCKET_NAME}${image.name}`}
+              src={`${AWS_BUCKET_NAME}${image.url}`}
               alt={image.name}
               className="w-full cursor-pointer object-cover"
               style={{ aspectRatio: "auto" }}
