@@ -30,20 +30,27 @@ const config = {
     defaultLocale: "en",
   },
   webpack: (config, {}) => {
+    // if we are in prod, the wasm files should go to static/chunks
+
+    const wasmPath =
+      process.env.NODE_ENV === "production"
+        ? "static/chunks"
+        : "static/chunks/pages/shelves";
     config.plugins.push(
       new CopyPlugin({
         patterns: [
           {
             from: "./node_modules/onnxruntime-web/dist/ort-wasm.wasm",
-            to: "static/chunks/pages/shelves",
+            to: wasmPath,
           },
           {
             from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.wasm",
-            to: "static/chunks/pages/shelves",
+            to: wasmPath,
           },
         ],
       }),
     );
+
     return config;
   },
   // webpack: (config, {}) => {
