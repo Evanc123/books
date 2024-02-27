@@ -53,12 +53,12 @@ function AuthShowcase() {
   return (
     <div className="relative flex flex-col items-center justify-center gap-4">
       <header className="absolute left-4 top-4 hover:cursor-pointer hover:underline">
-        Bookshelf
+        bookshelf.vision
       </header>
 
       <header
         className="absolute right-4 top-4 cursor-pointer rounded-full bg-white/10 font-semibold text-black no-underline transition hover:bg-white/20 hover:underline"
-        // onClick={sessionData ? () => void signOut() : () => void signIn()}
+        onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         <a
           target="_blank"
@@ -66,7 +66,7 @@ function AuthShowcase() {
         >
           Join the waitlist!
         </a>
-        {sessionData ? "Sign out" : ""}
+        {sessionData ? "Sign out" : "Sign in"}
       </header>
       <div className="absolute top-1">{sessionData && <ImageUpload />}</div>
       <div className="flex gap-4 pt-4">

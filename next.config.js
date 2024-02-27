@@ -35,11 +35,11 @@ const config = {
         patterns: [
           {
             from: "./node_modules/onnxruntime-web/dist/ort-wasm.wasm",
-            to: "static/chunks/pages/images",
+            to: "static/chunks/pages/shelves",
           },
           {
             from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.wasm",
-            to: "static/chunks/pages/images",
+            to: "static/chunks/pages/shelves",
           },
         ],
       }),

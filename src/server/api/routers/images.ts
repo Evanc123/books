@@ -70,6 +70,34 @@ export const imagesRouter = createTRPCRouter({
       });
     }),
 
+  updateName: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.image.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+        },
+      });
+    }),
+
+  deleteMask: protectedProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.mask.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
+
   createMask: protectedProcedure
     .input(
       z.object({

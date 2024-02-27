@@ -231,9 +231,10 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
               strokeWidth="2"
               // onClick={handlePolygonClick(mask.id, points)}
               pointerEvents="all"
-              className={`cursor-pointer ${
-                selectedMask?.id === mask?.id ? "opacity-100" : "opacity-0"
-              }`} // Update this line
+              className="cursor-pointer opacity-100"
+              // className={`cursor-pointer ${
+              //   selectedMask?.id === mask?.id ? "opacity-100" : "opacity-0"
+              // }`} // Update this line
               onMouseEnter={() => setSelectedMaskId(mask.id)} // Add this line
               // onMouseLeave={() => setSelectedMaskId(null)}
             />
