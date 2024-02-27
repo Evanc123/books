@@ -177,12 +177,13 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
   return (
     <div className="">
       <img
-        src={getCloudfrontUrl(src)}
+        src={src}
         alt={alt}
         className="!h-full !w-full object-contain"
         ref={imageRef}
         onLoad={handleImageLoad}
         onClick={handleImageClick}
+        crossOrigin="anonymous"
       />
       <svg
         ref={svgRef}
