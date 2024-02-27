@@ -1,3 +1,4 @@
+import { getCloudfrontUrl } from "~/pages";
 import { type modelInputProps } from "./helpers/Interfaces";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -176,7 +177,7 @@ export const EditMaskedImage: React.FC<IEditMaskedImage> = ({
   return (
     <div className="">
       <img
-        src={src}
+        src={getCloudfrontUrl(src)}
         alt={alt}
         className="!h-full !w-full object-contain"
         ref={imageRef}

@@ -7,6 +7,17 @@ import { useRouter } from "next/router";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
+const CLOUDFRONT_DISTRIBUTION = "https://d369728kkinweo.cloudfront.net";
+
+// function that splits the string after the first instance of .com/ and returns the second half
+const getS3Postfix = (url: string) => {
+  const splitUrl = url.split("amazonaws.com");
+  return splitUrl[1];
+};
+export const getCloudfrontUrl = (s3Url: string) => {
+  const postfix = getS3Postfix(s3Url);
+  return `${CLOUDFRONT_DISTRIBUTION}${postfix}`;
+};
 
 export default function Home() {
   return (
@@ -119,7 +130,7 @@ function AuthShowcase() {
             <img
               key={image.id}
               onClick={() => routeToImageView(image.id)}
-              src={image.url}
+              src={getCloudfrontUrl(image.url)}
               alt={image.name}
               className="w-full cursor-pointer object-cover"
               style={{ aspectRatio: "auto" }}
